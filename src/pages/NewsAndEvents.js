@@ -7,7 +7,7 @@ const NewsAndEvents = () => {
     // Fetch all news/events from the backend
     const fetchNewsEvents = async () => {
         try {
-            const response = await fetch('http://52.62.54.15:5000/api/news-events');
+            const response = await fetch('http://localhost:5000/api/news-events');
             const data = await response.json();
             setNewsEvents(data);
         } catch (error) {
@@ -20,7 +20,7 @@ const NewsAndEvents = () => {
         if (!newEvent.trim()) return;
 
         try {
-            await fetch('http://52.62.54.15:5000/api/news-events', {
+            await fetch('http://localhost:5000/api/news-events', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ content: newEvent })
@@ -35,7 +35,7 @@ const NewsAndEvents = () => {
     // Delete an event by id
     const handleDeleteEvent = async (id) => {
         try {
-            await fetch(`http://52.62.54.15:5000/api/news-events/${id}`, {
+            await fetch(`http://localhost:5000/api/news-events/${id}`, {
                 method: 'DELETE'
             });
             fetchNewsEvents();  // Refresh the event list
