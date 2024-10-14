@@ -1,26 +1,41 @@
 const express = require('express');
 const cors = require('cors');
-const { Pool } = require('pg');
+const fs = require('fs');
+const path = require('path');
 
 // Setup the Express server
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Set up the connection to PostgreSQL using Pool
-const pool = new Pool({
-    user: 'postgres',
-    host: 'localhost',
-    database: 'nirala_db',
-    password: 'Madhav@26',
-    port: 5432,
-});
+// Path to the JSON file where data will be stored
+const dataFilePath = path.join(__dirname, 'newsEvents.json');
+
+// Helper function to read data from the file
+const readDataFromFile = () => {
+    try {
+        const data = fs.readFileSync(dataFilePath, 'utf8');
+        return JSON.parse(data || '[]'); // Return parsed data or an empty array
+    } catch (error) {
+        console.error('Error reading data from file:', error);
+        return [];
+    }
+};
+
+// Helper function to write data to the file
+const writeDataToFile = (data) => {
+    try {
+        fs.writeFileSync(dataFilePath, JSON.stringify(data, null, 2), 'utf8');
+    } catch (error) {
+        console.error('Error writing data to file:', error);
+    }
+};
 
 // API to get all news/events
-app.get('/api/news-events', async (req, res) => {
+app.get('/api/news-events', (req, res) => {
     try {
-        const result = await pool.query('SELECT * FROM news_events ORDER BY created_at DESC');
-        res.json(result.rows);
+        const events = readDataFromFile();
+        res.json(events);
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Failed to fetch events' });
@@ -28,14 +43,17 @@ app.get('/api/news-events', async (req, res) => {
 });
 
 // API to add a new event
-app.post('/api/news-events', async (req, res) => {
+app.post('/api/news-events', (req, res) => {
     const { content } = req.body;
     if (!content) {
         return res.status(400).json({ error: 'Content is required' });
     }
 
     try {
-        await pool.query('INSERT INTO news_events (content) VALUES ($1)', [content]);
+        const events = readDataFromFile();
+        const newEvent = { id: Date.now(), content, createdAt: new Date().toISOString() };
+        events.push(newEvent);
+        writeDataToFile(events);
         res.status(201).json({ message: 'Event added successfully' });
     } catch (err) {
         console.error(err);
@@ -44,10 +62,13 @@ app.post('/api/news-events', async (req, res) => {
 });
 
 // API to delete an event by ID
-app.delete('/api/news-events/:id', async (req, res) => {
+app.delete('/api/news-events/:id', (req, res) => {
     const { id } = req.params;
+
     try {
-        await pool.query('DELETE FROM news_events WHERE id = $1', [id]);
+        let events = readDataFromFile();
+        events = events.filter(event => event.id !== parseInt(id));
+        writeDataToFile(events);
         res.status(200).json({ message: 'Event deleted successfully' });
     } catch (err) {
         console.error(err);
