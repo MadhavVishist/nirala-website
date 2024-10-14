@@ -50,11 +50,11 @@ const Biography = () => {
                     </p>
                 </section>
 
-                {/* YouTube Video Section */}
+                {/* YouTube Video Section
                 <section className="text-center">
                     <h2 className="text-3xl font-bold text-gray-800 mb-6">Watch: A Documentary on Nirala's Life</h2>
 
-                    {/* Responsive YouTube Embed */}
+                    Responsive YouTube Embed
                     <div className="w-full max-w-4xl aspect-video rounded-xl overflow-hidden shadow-lg">
                         <iframe 
                             className="w-full h-full rounded-xl" 
@@ -65,7 +65,7 @@ const Biography = () => {
                             allowFullScreen
                         ></iframe>
                     </div>
-                </section>
+                </section> */}
             </div>
         </div>
     );

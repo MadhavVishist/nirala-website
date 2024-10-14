@@ -1,7 +1,42 @@
-import React from 'react';
+import React,{useState} from 'react';
 import picture1 from '../assets/picture1.jpg';
 
 const Home = () => {
+    const [newsEvents, setNewsEvents] = useState([]);
+    const [isAddingEvent, setIsAddingEvent] = useState(false);
+    const [eventText, setEventText] = useState('');
+    const [passwordInput, setPasswordInput] = useState('');
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+    const handleAddEvent = () => {
+        if (isAuthenticated) {
+            setNewsEvents([...newsEvents, eventText]);
+            setEventText('');
+            setIsAddingEvent(false);
+        } else {
+            alert('Please enter the correct password to add news/events.');
+        }
+    };
+
+    const handlePasswordSubmit = () => {
+        if (passwordInput === 'vivechananirala@2090') {
+            setIsAuthenticated(true);
+            setIsAddingEvent(true);
+        } else {
+            alert('Incorrect password. Try again.');
+        }
+        setPasswordInput('');
+    };
+
+    const handleDeleteEvent = (index) => {
+        if (isAuthenticated) {
+            const updatedEvents = newsEvents.filter((_, i) => i !== index);
+            setNewsEvents(updatedEvents);
+        } else {
+            alert('Please enter the correct password to delete news/events.');
+        }
+    };
+
     return (
         <div className="home min-h-screen flex flex-col items-center py-10 px-6 text-center">
             <h1 className="text-5xl md:text-7xl font-extrabold text-[#6B4F4F] mb-10 leading-tight">
@@ -9,7 +44,6 @@ const Home = () => {
             </h1>
             <p className="text-xl md:text-2xl text-[#8B5D33] mb-12 max-w-[90%] lg:max-w-[50%] leading-relaxed">
             “मैं ही वसन्त का अग्रदूत”
-
             </p>
             <img 
                 src={picture1}
@@ -27,6 +61,80 @@ const Home = () => {
                     He experienced a tumultuous life, marred by family losses and societal hardships. His writings, marked by a deep affinity with nature and a critique of social injustices, established him as a prominent figure in Chhayavadi and subsequent poetic movements. His dedication to social reform and literary creativity highlights his significant impact on modern Hindi literature.
                 </p>
             </div>
+
+            {/* News and Events Section */}
+            {/* <div className="w-full py-12 px-6 md:px-12 lg:px-20">
+                <h2 className="text-4xl font-extrabold text-[#6B4F4F] mb-10">News and Upcoming Events</h2>
+
+                {newsEvents.length === 0 ? (
+                    <p className="text-lg text-[#5D4037]">No news or upcoming events at the moment.</p>
+                ) : (
+                    <ul className="space-y-4">
+                        {newsEvents.map((event, index) => (
+                            <li key={index} className="text-lg text-[#5D4037] bg-yellow-100 p-4 rounded-lg shadow-lg flex justify-between items-center">
+                                {event}
+                                {isAuthenticated && (
+                                    <button
+                                        onClick={() => handleDeleteEvent(index)}
+                                        className="text-red-500 hover:text-red-700 font-bold text-sm ml-4"
+                                    >
+                                        Delete
+                                    </button>
+                                )}
+                            </li>
+                        ))}
+                    </ul>
+                )}
+
+                {!isAddingEvent && (
+                    <div className="mt-6">
+                        <button
+                            onClick={() => setIsAddingEvent(true)}
+                            className="bg-teal-500 text-white px-4 py-2 rounded-lg shadow hover:bg-teal-600 transition-all"
+                        >
+                            Add News/Event
+                        </button>
+                    </div>
+                )}
+
+                {isAddingEvent && (
+                    <div className="mt-6 flex flex-col items-center space-y-4">
+                        {!isAuthenticated ? (
+                            <>
+                                <input
+                                    type="password"
+                                    value={passwordInput}
+                                    onChange={(e) => setPasswordInput(e.target.value)}
+                                    placeholder="Enter Password"
+                                    className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+                                />
+                                <button
+                                    onClick={handlePasswordSubmit}
+                                    className="bg-teal-500 text-white px-4 py-2 rounded-lg shadow hover:bg-teal-600 transition-all"
+                                >
+                                    Submit Password
+                                </button>
+                            </>
+                        ) : (
+                            <>
+                                <textarea
+                                    value={eventText}
+                                    onChange={(e) => setEventText(e.target.value)}
+                                    placeholder="Enter news or event details"
+                                    className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 "
+                                ></textarea>
+                                <button
+                                    onClick={handleAddEvent}
+                                    className="bg-teal-500 text-white px-4 py-2 rounded-lg shadow hover:bg-teal-600 transition-all"
+                                >
+                                    Add News/Event
+                                </button>
+                            </>
+                        )}
+                    </div>
+                )}
+            </div> */}
+
             {/* Achievements Section */}
             <div className=" w-full py-12 px-6 md:px-12 lg:px-20">
                 <h2 className="text-4xl font-extrabold text-[#6B4F4F] mb-10">Achievements</h2>
@@ -52,13 +160,9 @@ const Home = () => {
                     <div className="achievement-card p-6 bg-yellow-100 rounded-lg shadow-xl transform hover:scale-105 transition-transform duration-300">
                         <h3 className="text-2xl font-bold text-[#8B5D33] mb-4">Ram Ki Shakti Puja</h3>
                         <p className="text-md text-[#5D4037] leading-relaxed">
-                            "Ram Ki Shakti Puja," one of Nirala's most famous poems, is a timeless work that blends mythological narrative with deep philosophical musings. The poem is a spiritual exploration of Lord Rama's struggle, capturing not only the divine story but also the inner conflicts of humanity. Through powerful imagery and moving prose, Nirala crafted a literary masterpiece that remains a cornerstone in Hindi poetry.
-                        </p>
-                        <p className="text-md text-[#5D4037] leading-relaxed mt-4">
-                            This work exemplifies his ability to merge Indian epics with modern-day concerns, making ancient stories resonate with contemporary audiences.
+                            "Ram Ki Shakti Puja," one of Nirala's most famous poems, is a timeless work that blends mythological narrative with deep philosophical musings. The poem is a spiritual exploration of Lord Rama's struggle, capturing not only the divine story but also the inner conflicts of humanity. Through powerful imagery and emotional intensity, Nirala connects the personal to the universal, highlighting the significance of inner strength, perseverance, and faith in overcoming adversity.
                         </p>
                     </div>
-
                     <div className="achievement-card p-6 bg-white rounded-lg shadow-xl transform hover:scale-105 transition-transform duration-300">
                         <h3 className="text-2xl font-bold text-[#8B5D33] mb-4">Juhi Ki Kali</h3>
                         <p className="text-md text-[#5D4037] leading-relaxed">

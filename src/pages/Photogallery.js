@@ -15,7 +15,7 @@ import handwriting6 from '../assets/handwriting6.jpg';
 
 const images = [
     picture1, picture2, picture3, picture4, picture5, picture6,
-    handwriting1, handwriting2, handwriting3, handwriting4, handwriting5, handwriting6
+   
 ];
 
 const PhotoGallery = () => {
@@ -47,7 +47,7 @@ const PhotoGallery = () => {
             <p className="text-lg text-gray-600 mb-12">
                 A collection of images celebrating the life and works of Suryakant Tripathi Nirala.
             </p>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 w-full max-w-6xl">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-6 w-full max-w-6xl">
                 {images.map((image, index) => (
                     <div key={index} className="relative overflow-hidden group rounded-lg shadow-lg transition-transform duration-300 ease-in-out">
                         <img
